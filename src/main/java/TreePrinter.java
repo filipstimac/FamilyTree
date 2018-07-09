@@ -4,10 +4,10 @@ public class TreePrinter {
 
     public static void main(String[] args) {
         FileHandler fh = new FileHandler("relationships");
-        ArrayList<Person> personList = fh.getPersons();
+        ArrayList<Person> personList = null;
 
         try {
-            FileHandler.findCyclicRelationship(personList);
+            personList = fh.getPersons();
         } catch (CyclicRelationshipException e) {
             System.out.println("ERROR: Cyclic relationship detected.");
             System.exit(1);

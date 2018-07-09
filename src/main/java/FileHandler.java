@@ -7,13 +7,15 @@ import java.util.ArrayList;
 public class FileHandler {
 
     private String file;
+    private ArrayList<Person> personList;
 
     public FileHandler(String file) {
         this.file = file;
+        this.personList = new ArrayList<Person>();
     }
 
-    public ArrayList<Person> getPersons() {
-        ArrayList<Person> personList = new ArrayList<Person>();
+    public ArrayList<Person> getPersons() throws CyclicRelationshipException {
+        this.personList = new ArrayList<Person>();
         FileReader fr = null;
         BufferedReader br = null;
         try {
@@ -22,43 +24,51 @@ public class FileHandler {
             String line;
             while((line = br.readLine()) != null) {
                 String[] tmp = line.split(" ");
-                Person person = findPerson(tmp[1], personList);
+                Person person = findPerson(tmp[1], this.personList);
                 if(person == null) {
-                    personList.add(new Person(tmp[1], tmp[0]));
+                    this.personList.add(new Person(tmp[1], tmp[0]));
                 }
                 else {
                     person.addKid(tmp[0]);
                 }
             }
+            br.close();
         } catch (FileNotFoundException e) {
             System.out.println("File not found.");
+            System.exit(1);
         } catch (IOException e) {
             System.out.println("Error reading the line.");
+            System.exit(1);
         }
-        return personList;
+        findCyclicRelationship();
+        return this.personList;
     }
 
-    public static Person findPerson(String name, ArrayList<Person> personList) {
+    static Person findPerson(String name, ArrayList<Person> personList) {
         for(Person person : personList) {
             if(person.getName().equals(name)) return person;
         }
         return null;
     }
 
-    public static void findCyclicRelationship(ArrayList<Person> personList) throws CyclicRelationshipException {
-        for(Person person : personList) {
-            findCyclicRelationshipByPerson(personList, new ArrayList<String>(), person.getName());
+    public void findCyclicRelationship() throws CyclicRelationshipException {
+        for(Person person : this.personList) {
+            findCyclicRelationshipByPerson(new ArrayList<String>(), person.getName());
         }
     }
 
-    private static void findCyclicRelationshipByPerson(ArrayList<Person> personList, ArrayList<String> grandparents, String name) throws CyclicRelationshipException {
-        Person person = FileHandler.findPerson(name, personList);
+    public void findCyclicRelationshipByPerson(ArrayList<String> grandparents, String name) throws CyclicRelationshipException {
+        Person person = findPerson(name, this.personList);
         if(grandparents.contains(name)) throw new CyclicRelationshipException();
         if(person == null) return;
         for(String childName : person.getKids()) {
             ArrayList<String> newGrandparents = new ArrayList<String>(grandparents);
             newGrandparents.add(name);
-            findCyclicRelationshipByPerson(personList, newGrandparents, childName);
+            findCyclicRelationshipByPerson(newGrandparents, childName);
         }
+    }
+
+    public void setPersonList(ArrayList<Person> personList) {
+        this.personList = personList;
     }
 }

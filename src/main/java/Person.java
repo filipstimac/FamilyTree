@@ -13,6 +13,12 @@ public class Person {
         this.kids.add(kidName);
     }
 
+    public Person(String name, ArrayList<String> kids) {
+        this.name = name;
+        this.kids = kids;
+        this.nrKids = this.kids.size();
+    }
+
     public String getName() {
         return name;
     }
@@ -49,5 +55,13 @@ public class Person {
                 ", nrKids=" + nrKids +
                 ", kids=" + kids +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if(object == null) return false;
+        if(!(object instanceof Person)) return false;
+        final Person person = (Person) object;
+        return (person.name != null && this.name.equals(person.name) && this.nrKids == person.nrKids && this.kids.equals(person.kids));
     }
 }
