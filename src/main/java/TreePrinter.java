@@ -2,8 +2,14 @@ import java.util.ArrayList;
 
 public class TreePrinter {
 
+    private static final String FILENAME = "relationships";
+
     public static void main(String[] args) {
-        FileHandler fh = new FileHandler("relationships");
+        System.out.println(printTree(FILENAME));
+    }
+
+    public static String printTree(String filename) {
+        FileHandler fh = new FileHandler(filename);
         ArrayList<Person> personList = null;
 
         try {
@@ -17,10 +23,10 @@ public class TreePrinter {
 
         StringBuilder sb = new StringBuilder();
         for(String parentlessPerson: parentless) recursion(sb, personList, new ArrayList<String>(), parentlessPerson);
-        System.out.println(sb);
+        return sb.toString();
     }
 
-    private static void recursion(StringBuilder sb, ArrayList<Person> personList, ArrayList<String> grandparents, String name) {
+    public static void recursion(StringBuilder sb, ArrayList<Person> personList, ArrayList<String> grandparents, String name) {
         Person person = FileHandler.findPerson(name, personList);
         for(String grandparent : grandparents) sb.append("\t");
         sb.append(name);
@@ -33,7 +39,7 @@ public class TreePrinter {
         }
     }
 
-    private static ArrayList<String> findParentless(ArrayList<Person> personList) {
+    public static ArrayList<String> findParentless(ArrayList<Person> personList) {
         ArrayList<String> parentless = new ArrayList<String>();
         boolean isChild = false;
         for(Person person1 : personList) {

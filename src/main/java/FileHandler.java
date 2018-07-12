@@ -44,7 +44,7 @@ public class FileHandler {
         return this.personList;
     }
 
-    static Person findPerson(String name, ArrayList<Person> personList) {
+    public static Person findPerson(String name, ArrayList<Person> personList) {
         for(Person person : personList) {
             if(person.getName().equals(name)) return person;
         }

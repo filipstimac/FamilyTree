@@ -9,11 +9,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class FileHandlerTest {
 
-    private static final String PERSONS_DEFAULT = "Adam Ivan\nMarko Stjepan\nStjepan Adam\n" +
-            "Robert Stjepan\nFran Ivan\nLeopold Luka";
+    private static final String PERSONS_DEFAULT = "Adam Ivan\n" +
+            "Marko Stjepan\n" +
+            "Stjepan Adam\n" +
+            "Robert Stjepan\n" +
+            "Fran Ivan\n" +
+            "Leopold Luka";
     private static final String PERSONS_CYCLIC = PERSONS_DEFAULT + "\nIvan Marko";
     private static final String FILENAME = "test";
 
@@ -39,8 +44,8 @@ public class FileHandlerTest {
         ArrayList<Person> expected = new java.util.ArrayList<Person>();
         expected.add(new Person("Ivan", new ArrayList<String>(Arrays.asList("Adam", "Fran"))));
         expected.add(new Person("Stjepan", new ArrayList<String>(Arrays.asList("Marko", "Robert"))));
-        expected.add(new Person("Adam", new ArrayList<String>(Arrays.asList("Stjepan"))));
-        expected.add(new Person("Luka", new ArrayList<String>(Arrays.asList("Leopold"))));
+        expected.add(new Person("Adam", new ArrayList<String>(Collections.singletonList("Stjepan"))));
+        expected.add(new Person("Luka", new ArrayList<String>(Collections.singletonList("Leopold"))));
 
         Assert.assertArrayEquals(expected.toArray(), result.toArray());
     }

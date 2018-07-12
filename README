@@ -1,0 +1,7 @@
+USING THE APPLICATION
+
+Application reads file from root directory of project, parsing relationships in format <child name> <parent name> and it doesn't require any arguments. Result is printed out to system standard output in form of family tree.
+
+In case of cyclic relationships application is stopped and error is displayed and in case of two parents to one child parents are printed separately.
+
+Test are separated into two files, each of them named after class they test, appended with Test.
